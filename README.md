@@ -1,10 +1,10 @@
-# Express Test API - මගේ Express API අත්හදා බැලීම
+# Express Test API
 
 This is a simple Express.js API testing project that allows users to send a request and receive a response. The interface is in Sinhala, providing an easy-to-use API testing environment.
 
 ## 🚀 Features
 
-- Simple user interface with Sinhala text
+- Simple user interface
 - Input field to enter a request
 - Button to send the request
 - Display response from API
