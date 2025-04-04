@@ -86,6 +86,7 @@
                 .then(data => {
                     showResponse(`Message submitted! ID: ${data.submission.id}`, 'success');
                     document.getElementById('userInput').value = ''; // Clear input field
+                    fetchSubmissions(); // Automatically fetch and display all messages
                 })
                 .catch(error => {
                     showResponse('An error occurred: ' + error, 'danger');

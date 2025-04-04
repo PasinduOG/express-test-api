@@ -24,7 +24,7 @@ app.post('/api/submit', (req, res) => {
         date: new Date().toLocaleString()
     };
     allSubmissions.push(newSubmission);
-    res.json({ success: true, submission: newSubmission });
+    res.json({ status: 'success', submission: newSubmission, allSubmissions });
 });
 
 // DELETE - Remove a submission by ID
