@@ -1,0 +1,24 @@
+{
+  "name": "express-test-api",
+  "version": "1.0.0",
+  "description": "This is a simple **Express.js API testing application** with a user-friendly **Sinhala interface**. The project allows users to send requests and view responses, making it easy to test API functionalities.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PasinduOG/express-test-api.git"
+  },
+  "author": "Pasindu Madhuwantha (Pasindu OG Dev)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PasinduOG/express-test-api/issues"
+  },
+  "homepage": "https://github.com/PasinduOG/express-test-api#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.9"
+  }
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My API Testing</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold text-primary">My Express API Testing</h1>
+                    <div class="col-lg-6 mx-auto">
+                        <p class="lead mb-4">A simple interface to test your Express API endpoints</p>
+                    </div>
+                </div>
+
+                <!-- New Message Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title h5 mb-0">Add a New Message</h3>
+                    </div>
+                    <div class="card-body">
+                        <form onsubmit="submitForm(event)">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="userInput" placeholder="Enter your message"
+                                    required>
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- All Messages Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title h5 mb-0">All Messages</h3>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-outline-primary mb-3" onclick="fetchSubmissions()">
+                            <i class="bi bi-arrow-repeat"></i> View Messages
+                        </button>
+                        <div id="submissionsList" class="list-group"></div>
+                    </div>
+                </div>
+
+                <!-- Response Card -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title h5 mb-0">Response</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="response" class="alert alert-light border d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Handle form submission
+        function submitForm(event) {
+            event.preventDefault();
+            const userInput = document.getElementById('userInput').value;
+
+            fetch('/api/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `userInput=${encodeURIComponent(userInput)}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showResponse(`Message submitted! ID: ${data.submission.id}`, 'success');
+                    document.getElementById('userInput').value = ''; // Clear input field
+                })
+                .catch(error => {
+                    showResponse('An error occurred: ' + error, 'danger');
+                });
+        }
+
+        // Fetch all messages
+        function fetchSubmissions() {
+            fetch('/api/submissions')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('submissionsList');
+                    if (data.length === 0) {
+                        list.innerHTML = '<div class="alert alert-info">No messages found.</div>';
+                        return;
+                    }
+
+                    list.innerHTML = '';
+                    data.forEach(item => {
+                        const listItem = document.createElement('div');
+                        listItem.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                        listItem.innerHTML = `
+                            <div>
+                                <p class="mb-1">${item.text}</p>
+                                <small class="text-muted">${item.date}</small>
+                            </div>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSubmission(${item.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        `;
+                        list.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    showResponse('An error occurred: ' + error, 'danger');
+                });
+        }
+
+        // Delete a message
+        function deleteSubmission(id) {
+            fetch(`/api/submissions/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showResponse(`Message deleted! (ID: ${id})`, 'success');
+                    fetchSubmissions(); // Refresh the list
+                })
+                .catch(error => {
+                    showResponse('An error occurred: ' + error, 'danger');
+                });
+        }
+
+        function showResponse(content, type = 'primary') {
+            const responseElement = document.getElementById('response');
+            responseElement.textContent = content;
+            responseElement.className = `alert alert-${type}`;
+            responseElement.classList.remove('d-none');
+        }
+    </script>
+</body>
+
+</html>
