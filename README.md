@@ -25,7 +25,7 @@ This is a simple Express.js API testing project that allows users to send a requ
 
 4. **Run the project**
    ```bash
-   npm start
+   npm run dev
 
 5. **Open in browser**
    ```bash
